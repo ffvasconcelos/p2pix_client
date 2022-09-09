@@ -1,0 +1,62 @@
+.cabecalho{
+    position: absolute;
+    width: 100%;
+    height: 133px;
+    left: 0px;
+    top: 0px;
+    background: #292128;
+   
+
+}
+#img-pix{
+    margin: 10px;
+}
+body{
+    background: #32BCAD;
+    font: italic bold  15px "Times New Roman", Times, serif;
+    
+}
+
+h4{
+    color: white;
+    font-size: 1.2em;
+    margin-bottom: 0px;
+}
+#espaco{
+    margin: 210px 0px 0px 170px;
+    
+}
+#tabela{
+    position: absolute;
+        top: 307px; 
+        bottom: 0px;
+        left: 820px;
+        right: 0px;
+        background-color: white;
+        
+}
+#resumo{
+    position: absolute;
+        top: 280px; 
+        bottom: 0px;
+        left: 820px;
+        right: 0px;
+    font: italic bold  1.2em "Times New Roman", Times, serif;
+    color: white;
+}
+#saldo{
+
+    position: absolute;
+    width: 263px;
+    height: 98px;
+    left: 1071px;
+    top: 158px;
+    font: italic bold  1.2em "Times New Roman", Times, serif;
+    color: white;
+    background: #4CDE34;
+
+
+}
+#tamanho{
+    font-size: 1.4rem;
+}
