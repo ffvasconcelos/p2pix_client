@@ -3,18 +3,24 @@
 
 <script type="text/javascript">$("#data").mask("(00) 0000-00009");</script>
 */
-var saldo =100.00;
+const walet = {
+    saldo: 100.00,
+    name: ""
+}
 
 const express = require('express')
 const {createServer} = require('http')
 const http = require("http");
+const axios = require('axios')
 
 const app = express();
 const httpServer = createServer(app);
 
 const { io } = require("socket.io-client");
 
-const socket = io("http://localhost:8000/", {
+const server = "http://192.168.2.11:8000/"
+
+const socket = io(server, {
     path: '/p2pix_connect',
 })
 
@@ -33,7 +39,9 @@ app.get('/', (req, res) => {
 app.get('/transaction', ({query}, res) => {
     const value = Number.parseFloat(query.value).toFixed(2)
 
-    saldo = saldo + value
+    walet.saldo = walet.saldo + value
+
+    console.log("Money received, walet value: " + walet.saldo)
 
     res.send().status(200)
 })
@@ -41,9 +49,36 @@ app.get('/transaction', ({query}, res) => {
 app.get('/register', ({query}, res) => {
     const name = query.name
 
+    walet.name = name
+
     socket.emit("addClient", name)
 
+    console.log("Registered to server")
+
     res.send().status(200)
+})
+
+app.get('send', async ({query},  res) => {
+    const data = await axios({
+        method: 'get',
+        url: server + '/getData?sender=' + walet.name + '&receiver=' + query.receiver + '&value=' + query.value,
+    })
+
+    console.log(data)
+
+    if(data.status === 200) {
+        const p2pConnection = await axios({
+            method: 'get',
+            url: 'http://' + data.data.ip + ':9000/transaction?value=' + query.value
+        })
+
+        console.log("Transaction well succeeded")
+        res.send().status(p2pConnection.status)
+    } else {
+        res.send().status(data.status)
+    }
+
+
 })
 
 httpServer.listen(9000, () => {
