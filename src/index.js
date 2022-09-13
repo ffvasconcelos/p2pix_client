@@ -3,6 +3,21 @@
 
 <script type="text/javascript">$("#data").mask("(00) 0000-00009");</script>
 */
+const express = require('express')
+const {createServer} = require('http')
+const http = require("http");
+
+const app = express();
+const httpServer = createServer(app);
+
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/login.html');
+});
+
+httpServer.listen(3000, () => {
+    console.log('Server listening to port 3000')
+});
 
 var saldo =100.0;
 
