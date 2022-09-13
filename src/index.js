@@ -3,6 +3,8 @@
 
 <script type="text/javascript">$("#data").mask("(00) 0000-00009");</script>
 */
+var saldo =100.00;
+
 const express = require('express')
 const {createServer} = require('http')
 const http = require("http");
@@ -10,16 +12,43 @@ const http = require("http");
 const app = express();
 const httpServer = createServer(app);
 
+const { io } = require("socket.io-client");
+
+const socket = io("http://localhost:8000/", {
+    path: '/p2pix_connect',
+})
+
+socket.on("connect", () => {
+    console.log("Connected with server succesfully")
+});
+
+socket.on("disconnect", () => {
+    console.log("Server connection undone")
+});
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/login.html');
 });
 
+app.get('/transaction', ({query}, res) => {
+    const value = Number.parseFloat(query.value).toFixed(2)
+
+    saldo = saldo + value
+
+    res.send().status(200)
+})
+
+app.get('/register', ({query}, res) => {
+    const name = query.name
+
+    socket.emit("addClient", name)
+
+    res.send().status(200)
+})
+
 httpServer.listen(3000, () => {
     console.log('Server listening to port 3000')
 });
-
-var saldo =100.0;
 
 function atualizarSaldo(){
     let computar = document.getElementById('saldo');
