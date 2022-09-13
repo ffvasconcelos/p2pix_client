@@ -46,8 +46,8 @@ app.get('/register', ({query}, res) => {
     res.send().status(200)
 })
 
-httpServer.listen(3000, () => {
-    console.log('Server listening to port 3000')
+httpServer.listen(9000, () => {
+    console.log('Server listening to port 9000')
 });
 
 function atualizarSaldo(){
