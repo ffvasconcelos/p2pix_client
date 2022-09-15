@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/transaction', ({query}, res) => {
-    const value = Number.parseFloat(query.value).toFixed(2)
+    const value = Number.parseFloat(query.value)
 
     walet.saldo = walet.saldo + value
 
@@ -74,6 +74,7 @@ app.get('/send', async ({query},  res) => {
             })
 
             console.log("Transaction well succeeded")
+            walet.saldo = walet.saldo - query.value
             res.send().status(p2pConnection.status)
         } else {
             res.send().status(data.status)
