@@ -58,27 +58,34 @@ app.get('/register', ({query}, res) => {
     res.send().status(200)
 })
 
-app.get('send', async ({query},  res) => {
-    const data = await axios({
-        method: 'get',
-        url: server + '/getData?sender=' + walet.name + '&receiver=' + query.receiver + '&value=' + query.value,
-    })
+app.get('/send', async ({query},  res) => {
 
-    console.log(data)
-
-    if(data.status === 200) {
-        const p2pConnection = await axios({
+    try {
+        console.log('Iniciando transação')
+        const data = await axios({
             method: 'get',
-            url: 'http://' + data.data.ip + ':9000/transaction?value=' + query.value
+            url: server + 'getData?sender=' + walet.name + '&receiver=' + query.receiver + '&value=' + query.value,
         })
 
-        console.log("Transaction well succeeded")
-        res.send().status(p2pConnection.status)
-    } else {
-        res.send().status(data.status)
+        if(data.status === 200) {
+            const p2pConnection = await axios({
+                method: 'get',
+                url: 'http://' + data.data.ip + ':9000/transaction?value=' + query.value
+            })
+
+            console.log("Transaction well succeeded")
+            res.send().status(p2pConnection.status)
+        } else {
+            res.send().status(data.status)
+        }
+    } catch (error) {
+        console.log(error)
     }
 
+})
 
+app.get('/walet',(req, res) => {
+    res.send(walet).status(200)
 })
 
 httpServer.listen(9000, () => {
